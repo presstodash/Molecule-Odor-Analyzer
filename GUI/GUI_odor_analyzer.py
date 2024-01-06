@@ -28,9 +28,9 @@ class ChemicalSearchApp:
         categories = ["Descriptor", "Smiles", "Name"]
 
         # Create the CTkComboBox
-        category_dropdown = ctk.CTkComboBox(frame, values=categories)
-        category_dropdown.grid(row=0, column=1, pady=10, padx=10)
-        category_dropdown.configure(state="readonly")
+        self.category_dropdown = ctk.CTkComboBox(frame, values=categories)
+        self.category_dropdown.grid(row=0, column=1, pady=10, padx=10)
+        self.category_dropdown.configure(state="readonly")
 
         # Entry
         search_label = ctk.CTkLabel(frame, text="Enter Search Value:")
@@ -44,18 +44,16 @@ class ChemicalSearchApp:
         search_button.grid(row=0, column=4, columnspan=2, pady=10)
 
         # Trace changes in the CTkComboBox
-        #def category_change():
-         #   self.category_var.set(category_dropdown.get())
+        #self.category_var.trace('w', lambda *args: self.category_var.set(category_dropdown.get()))
 
-        #category_dropdown.set(categories[0])
-        #category_dropdown.bind("<<ComboboxSelected>>", category_change)
+        self.category_dropdown.set(categories[0])
 
-        category_dropdown.bind("<Configure>", lambda event, var=self.category_var: var.set(category_dropdown.get()))
 
     def perform_search(self):
-        category = self.category_var.get().strip()
+        category = self.category_dropdown.get().strip()
         search_value = self.search_var.get().strip()
 
+        print(f"Category: {category}, Search Value: {search_value}")  # Add this line
         if not search_value:
             messagebox.showwarning("ser")
             return
