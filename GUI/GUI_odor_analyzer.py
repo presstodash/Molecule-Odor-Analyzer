@@ -1,4 +1,4 @@
-from Baza.Funkcije import SearchDescriptor, SearchSmiles, SearchName
+from Molecule_Odor_Analyzer.Baza.Funkcije import SearchDescriptor, SearchSmiles, SearchName
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox
@@ -9,7 +9,7 @@ class ChemicalSearchApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Odor molecule analyzer")
-        self.root.geometry("400x200")
+        self.root.geometry("1000x600")
 
         self.category_var = tk.StringVar()
         self.search_var = tk.StringVar()
@@ -34,14 +34,14 @@ class ChemicalSearchApp:
 
         # Entry
         search_label = ctk.CTkLabel(frame, text="Enter Search Value:")
-        search_label.grid(row=1, column=0, pady=10, padx=10, sticky=tk.W)
+        search_label.grid(row=0, column=2, pady=10, padx=10, sticky=tk.W)
 
         search_entry = ctk.CTkEntry(frame, textvariable=self.search_var)
-        search_entry.grid(row=1, column=1, pady=10, padx=10)
+        search_entry.grid(row=0, column=3, pady=10, padx=10)
 
         # Search button
         search_button = ctk.CTkButton(frame, text="Search", command=self.perform_search)
-        search_button.grid(row=2, column=0, columnspan=2, pady=10)
+        search_button.grid(row=0, column=4, columnspan=2, pady=10)
 
         # Trace changes in the CTkComboBox
         #def category_change():
