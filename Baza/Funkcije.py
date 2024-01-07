@@ -1,6 +1,8 @@
 import psycopg2  # PostgreSQL
 #import pubchempy as pcp  # PubChem baza podataka
 #import csv
+from rdkit import Chem
+from rdkit.Chem import Draw
 
 pgUser = "postgres"
 pgPassword = "root"
@@ -75,7 +77,14 @@ def SearchSmiles(smiles):
     """.format(idm = x[0])
     cursor.execute(sql)
     y = cursor.fetchall()
-    return x,y
+    
+    mol = Chem.MolFromSmiles(x[2])
+    if mol is not None:
+        img = Draw.MolToImage(mol, size=(300, 300))
+    else:
+        img = None
+    
+    return x,y, img
     
 
 def SearchName(name):
@@ -100,7 +109,14 @@ def SearchName(name):
     """.format(idm = x[0])
     cursor.execute(sql)
     y = cursor.fetchall()
-    return x,y
+    
+    mol = Chem.MolFromSmiles(x[2])
+    if mol is not None:
+        img = Draw.MolToImage(mol, size=(300, 300))
+    else:
+        img = None
+        
+    return x,y,img
     
 
 #print(SearchDescriptor("fishy nutty"))

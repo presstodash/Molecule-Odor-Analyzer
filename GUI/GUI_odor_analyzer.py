@@ -4,6 +4,7 @@ import tkinter as tk
 import CTkTable as ctktable
 from tkinter import messagebox
 import psycopg2
+from PIL import Image, ImageTk
 
 
 class ChemicalSearchApp:
@@ -90,9 +91,9 @@ class ChemicalSearchApp:
             if category == "Descriptor":
                 result = SearchDescriptor(search_value)
             elif category == "Smiles":
-                result = SearchSmiles(search_value)
+                result, result2, img = SearchSmiles(search_value)
             elif category == "Name":
-                result = SearchName(search_value)
+                result, result2, img = SearchName(search_value)
 
             if not result:
                 messagebox.showinfo("Result", "No matching records found.")
@@ -103,21 +104,113 @@ class ChemicalSearchApp:
 
                 # Show the selected frame
                 if category in ["Descriptor","Smiles","Name"]:
-                    self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
 
                     match category:
                         case "Descriptor":
 
+                            self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
 
                             self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
                             self.scrollable_frame.pack(expand=True, fill="both")
                             
                             self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(result), column=5, values=result)
                             self.table.pack(expand=True, fill="both")
+                        
+                        
                         case "Smiles":
-                            messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                            #messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                            
+                            
+                            self.frames[category].grid(columnspan=2, sticky='nsew', pady=10, padx=10,)
+                            
+                            self.molecule_dispay = ctk.CTkFrame(master=self.frames[category])
+                            self.molecule_dispay.pack(expand=True, fill="both")
+                            
+                            self.ime_label = ctk.CTkLabel(self.molecule_dispay, text="Ime Molekule:")
+                            self.ime_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[1])
+                            self.ime_value.grid(row=0, column=1, pady=10, padx=10)
+                            
+                            
+                            self.smiles_label = ctk.CTkLabel(self.molecule_dispay, text="SMILES Kod:")
+                            self.smiles_label.grid(row=1, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[2])
+                            self.ime_value.grid(row=1, column=1, pady=10, padx=10)
+                            
+                            
+                            self.formula_label = ctk.CTkLabel(self.molecule_dispay, text="Molekulska formula:")
+                            self.formula_label.grid(row=2, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[3])
+                            self.ime_value.grid(row=2, column=1, pady=10, padx=10)
+                            
+                            
+                            self.masa_label = ctk.CTkLabel(self.molecule_dispay, text="Relativna molekulska masa:")
+                            self.masa_label.grid(row=3, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[4])
+                            self.ime_value.grid(row=3, column=1, pady=10, padx=10)
+                            
+                            if img is not None: 
+                                self.slika_label = ctk.CTkLabel(self.molecule_dispay, text="Grafički prikaz:")
+                                self.slika_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
+                                
+                                tk_image = ImageTk.PhotoImage(img)
+                                label_image = tk.Label(self.molecule_dispay, image=tk_image)
+                                label_image.image = tk_image  # Keep a reference to the image
+                                label_image.grid(row=4, column=1, pady=10, padx=10)
+                            
+                            
+                        
                         case "Name":
-                            messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                            #messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                        
+                            
+                            
+                            self.frames[category].grid(columnspan=2, sticky='nsew', pady=10, padx=10,)
+                            
+                            self.molecule_dispay = ctk.CTkFrame(master=self.frames[category])
+                            self.molecule_dispay.pack(expand=True, fill="both")
+                            
+                            self.ime_label = ctk.CTkLabel(self.molecule_dispay, text="Ime Molekule:")
+                            self.ime_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[1])
+                            self.ime_value.grid(row=0, column=1, pady=10, padx=10)
+                            
+                            
+                            self.smiles_label = ctk.CTkLabel(self.molecule_dispay, text="SMILES Kod:")
+                            self.smiles_label.grid(row=1, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[2])
+                            self.ime_value.grid(row=1, column=1, pady=10, padx=10)
+                            
+                            
+                            self.formula_label = ctk.CTkLabel(self.molecule_dispay, text="Molekulska formula:")
+                            self.formula_label.grid(row=2, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[3])
+                            self.ime_value.grid(row=2, column=1, pady=10, padx=10)
+                            
+                            
+                            self.masa_label = ctk.CTkLabel(self.molecule_dispay, text="Relativna molekulska masa:")
+                            self.masa_label.grid(row=3, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = tk.Message(self.molecule_dispay, text=result[4])
+                            self.ime_value.grid(row=3, column=1, pady=10, padx=10)
+                            
+                            if img is not None: 
+                                self.slika_label = ctk.CTkLabel(self.molecule_dispay, text="Grafički prikaz:")
+                                self.slika_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
+                                
+                                tk_image = ImageTk.PhotoImage(img)
+                                label_image = tk.Label(self.molecule_dispay, image=tk_image)
+                                label_image.image = tk_image  # Keep a reference to the image
+                                label_image.grid(row=4, column=1, pady=10, padx=10)
+                            
+                        
                         case _:
                             print("No category found.")
                     
