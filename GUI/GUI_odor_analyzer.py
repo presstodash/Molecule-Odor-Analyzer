@@ -1,6 +1,7 @@
 from Molecule_Odor_Analyzer.Baza.Funkcije import SearchDescriptor, SearchSmiles, SearchName
 import customtkinter as ctk
 import tkinter as tk
+import CTkTable as ctktable
 from tkinter import messagebox
 import psycopg2
 
@@ -9,7 +10,7 @@ class ChemicalSearchApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Odor molecule analyzer")
-        self.root.geometry("1000x600")
+        self.root.geometry("1200x600")
 
         self.category_var = tk.StringVar()
         self.search_var = tk.StringVar()
@@ -96,15 +97,32 @@ class ChemicalSearchApp:
             if not result:
                 messagebox.showinfo("Result", "No matching records found.")
             else:
-                messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                # Hide all frames
+                for frame in self.frames.values():
+                    frame.grid_remove()
 
-            # Hide all frames
-            for frame in self.frames.values():
-                frame.grid_remove()
+                # Show the selected frame
+                if category in ["Descriptor","Smiles","Name"]:
+                    self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
 
-            # Show the selected frame
-            if category in ["Descriptor","Smiles","Name"]:
-                self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
+                    match category:
+                        case "Descriptor":
+
+
+                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
+                            self.scrollable_frame.pack(expand=True, fill="both")
+                            
+                            self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(result), column=5, values=result)
+                            self.table.pack(expand=True, fill="both")
+                        case "Smiles":
+                            messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                        case "Name":
+                            messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
+                        case _:
+                            print("No category found.")
+                    
+
+
             
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
