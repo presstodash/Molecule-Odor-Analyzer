@@ -18,30 +18,50 @@ class ChemicalSearchApp:
 
     def create_widgets(self):
 
-        frame = ctk.CTkFrame(self.root)
-        frame.pack(expand=True, fill="both")
+        self.frame = ctk.CTkFrame(self.root)
+        self.frame.pack(expand=True, fill="both")
 
+        # Dynamic frame for search display
+        self.frames = {"Descriptor": ctk.CTkFrame(self.frame),
+                       "Smiles": ctk.CTkFrame(self.frame),
+                       "Name": ctk.CTkFrame(self.frame)}
+
+        for frame in self.frames.values():
+            frame.grid(row = 1, column = 0, sticky = 'nsew')
+            
+        for frame in self.frames.values():
+            frame.grid_forget()
+
+        #dynamic sizing
+        self.frame.grid_rowconfigure(1, weight=1)
+
+        self.columncount = 5
+        
+        for i in range(self.columncount):
+            self.frame.grid_columnconfigure(i, weight=1)
+
+        
         # Dropdown menu for categories
-        category_label = ctk.CTkLabel(frame, text="Select Category:")
-        category_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
+        self.category_label = ctk.CTkLabel(self.frame, text="Select Category:")
+        self.category_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
 
         categories = ["Descriptor", "Smiles", "Name"]
 
         # Create the CTkComboBox
-        self.category_dropdown = ctk.CTkComboBox(frame, values=categories)
+        self.category_dropdown = ctk.CTkComboBox(self.frame, values=categories)
         self.category_dropdown.grid(row=0, column=1, pady=10, padx=10)
         self.category_dropdown.configure(state="readonly")
 
         # Entry
-        search_label = ctk.CTkLabel(frame, text="Enter Search Value:")
-        search_label.grid(row=0, column=2, pady=10, padx=10, sticky=tk.W)
+        self.search_label = ctk.CTkLabel(self.frame, text="Enter Search Value:")
+        self.search_label.grid(row=0, column=2, pady=10, padx=10, sticky=tk.W)
 
-        search_entry = ctk.CTkEntry(frame, textvariable=self.search_var)
-        search_entry.grid(row=0, column=3, pady=10, padx=10)
+        self.search_entry = ctk.CTkEntry(self.frame, textvariable=self.search_var)
+        self.search_entry.grid(row=0, column=3, pady=10, padx=10)
 
         # Search button
-        search_button = ctk.CTkButton(frame, text="Search", command=self.perform_search)
-        search_button.grid(row=0, column=4, columnspan=2, pady=10)
+        self.search_button = ctk.CTkButton(self.frame, text="Search", command=self.perform_search)
+        self.search_button.grid(row=0, column=4, columnspan=2, pady=10)
 
         # Trace changes in the CTkComboBox
         #self.category_var.trace('w', lambda *args: self.category_var.set(category_dropdown.get()))
@@ -53,7 +73,6 @@ class ChemicalSearchApp:
         category = self.category_dropdown.get().strip()
         search_value = self.search_var.get().strip()
 
-        print(f"Category: {category}, Search Value: {search_value}")  # Add this line
         if not search_value:
             messagebox.showwarning("ser")
             return
@@ -79,6 +98,14 @@ class ChemicalSearchApp:
             else:
                 messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
 
+            # Hide all frames
+            for frame in self.frames.values():
+                frame.grid_remove()
+
+            # Show the selected frame
+            if category in ["Descriptor","Smiles","Name"]:
+                self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
+            
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
