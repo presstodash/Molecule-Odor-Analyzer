@@ -44,8 +44,8 @@ cursor.execute("DROP TABLE IF EXISTS Molekule")
 sql = """
 CREATE TABLE Molekule(
     ID_Molekule INTEGER NOT NULL PRIMARY KEY,
-    Ime_Molekule VARCHAR(150),
-    SMILES_Kod VARCHAR(150),
+    Ime_Molekule VARCHAR(200),
+    SMILES_Kod VARCHAR(200),
     Kemijska_Formula VARCHAR(50),
     Molekulska_Masa DECIMAL
 )
@@ -68,6 +68,42 @@ CREATE TABLE Svojstva(
 
 cursor.execute(sql)
 print("Tablica Svojstva uspješno napravljena.")
+conn.commit()
+
+
+cursor.execute("DROP TABLE IF EXISTS SlicnostSvojstva")
+
+sql = """
+CREATE TABLE SlicnostSvojstva(
+    ID_Molekule1 INTEGER NOT NULL,
+    ID_Molekule2 INTEGER NOT NULL,
+    SlicnostS NUMERIC,
+    PRIMARY KEY (ID_Molekule1, ID_Molekule2),
+    FOREIGN KEY (ID_Molekule1) REFERENCES Molekule(ID_Molekule),
+    FOREIGN KEY (ID_Molekule2) REFERENCES Molekule(ID_Molekule)
+)
+"""
+
+cursor.execute(sql)
+print("Tablica SvojstvaSlicnost uspješno napravljena.")
+conn.commit()
+
+
+cursor.execute("DROP TABLE IF EXISTS SlicnostMiris")
+
+sql = """
+CREATE TABLE SlicnostMiris(
+    ID_Molekule1 INTEGER NOT NULL,
+    ID_Molekule2 INTEGER NOT NULL,
+    SlicnostM NUMERIC,
+    PRIMARY KEY (ID_Molekule1, ID_Molekule2),
+    FOREIGN KEY (ID_Molekule1) REFERENCES Molekule(ID_Molekule),
+    FOREIGN KEY (ID_Molekule2) REFERENCES Molekule(ID_Molekule)
+)
+"""
+
+cursor.execute(sql)
+print("Tablica SvojstvaMiris uspješno napravljena.")
 conn.commit()
 
 conn.close()

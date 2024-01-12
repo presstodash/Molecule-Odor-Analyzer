@@ -1,6 +1,10 @@
 import psycopg2  # PostgreSQL
 import pubchempy as pcp  # PubChem baza podataka
 import csv
+from rdkit import Chem
+from rdkit import DataStructs
+from rdkit.Chem import AllChem
+from rdkit.DataStructs import TanimotoSimilarity
 
 file_path = 'curated_GS_LF_merged_4983.csv'
 
@@ -20,7 +24,8 @@ def get_compound_details(smiles_code):
     name = compound.iupac_name  # Compound name
     formula = compound.molecular_formula  # Compound formula
     weight = compound.molecular_weight  # Molecular weight
-    return compound_id, name, formula, weight
+    smiles = compound.canonical_smiles
+    return compound_id, name, formula, weight, smiles
 
 
 
@@ -33,6 +38,8 @@ with open(file_path, 'r', newline='') as csvfile:
             firstLine = False
         else:
             try:
+                print(x)
+                x +=1
                 
                 conn = psycopg2.connect(
                     database="kemoinformatika",
@@ -42,7 +49,7 @@ with open(file_path, 'r', newline='') as csvfile:
                     port='5432'
                     )
                 cursor = conn.cursor()
-                smiles = row[0]  # Prvi stupac
+                smiles = row[0].upper()  # Prvi stupac
                 #print(smiles)
                 sql = "SELECT * FROM Molekule WHERE smiles_kod like '{sm}'".format(sm = smiles)
                 cursor.execute(sql)
@@ -51,7 +58,7 @@ with open(file_path, 'r', newline='') as csvfile:
                 if mol == None:
                     
                     scents = row[1].split(";")  # Drugi stupac
-                    compound_id, name, formula, weight = get_compound_details(smiles)
+                    compound_id, name, formula, weight, smiles = get_compound_details(smiles)
                     
                     if name == None:
                         name = ""
@@ -59,7 +66,7 @@ with open(file_path, 'r', newline='') as csvfile:
                         continue
                 
                     name = name.replace("'","''")
-                    sql = "INSERT INTO Molekule(ID_Molekule, Ime_Molekule, SMILES_Kod, Kemijska_Formula, Molekulska_Masa) VALUES ({cid}, '{ime}', '{smi}', '{kf}', {mm})".format(cid=compound_id, ime=name, smi=smiles, kf=formula, mm=weight)
+                    sql = "INSERT INTO Molekule(ID_Molekule, Ime_Molekule, SMILES_Kod, Kemijska_Formula, Molekulska_Masa) VALUES ({cid}, '{ime}', '{smi}', '{kf}', {mm})".format(cid=compound_id, ime=name.lower(), smi=smiles, kf=formula, mm=weight)
                     #print(sql)
                     cursor.execute(sql)
                     conn.commit()
@@ -71,9 +78,84 @@ with open(file_path, 'r', newline='') as csvfile:
                         #print(compound_id)
                     
                     conn.close()
+                    
             except Exception as e:
-                print(x)
                 print(e)
                 print(smiles)
-                x = x + 1
+                
+                
+                
 
+conn = psycopg2.connect(
+    database="kemoinformatika",
+    user=pgUser,
+    password=pgPassword,
+    host='127.0.0.1',
+    port='5432'
+    )
+cursor = conn.cursor()
+
+sql = "SELECT ID_Molekule from Molekule"
+cursor.execute(sql)
+ids = cursor.fetchall()
+conn.close()
+
+
+
+
+#print(ids[0][0])
+
+
+for i in range(len(ids)):
+    for j in range(i, len(ids)):
+        try:
+            conn = psycopg2.connect(
+                database="kemoinformatika",
+                user=pgUser,
+                password=pgPassword,
+                host='127.0.0.1',
+                port='5432'
+                )
+            cursor = conn.cursor()
+            sql = "SELECT SMILES_Kod from Molekule where ID_Molekule = {idm}".format(idm=ids[i][0])
+            cursor.execute(sql)
+            sm1 = cursor.fetchone()[0]
+            sql = "SELECT SMILES_Kod from Molekule where ID_Molekule = {idm}".format(idm=ids[j][0])
+            cursor.execute(sql)
+            sm2 = cursor.fetchone()[0]
+            
+            mol1 = Chem.MolFromSmiles(sm1)
+            mol2 = Chem.MolFromSmiles(sm2)
+            
+            if mol1 is not None and mol2 is not None:
+                fp1 = AllChem.RDKFingerprint(mol1)
+                fp2 = AllChem.RDKFingerprint(mol2)
+                
+                similarity = TanimotoSimilarity(fp1, fp2)
+                
+                sql = "INSERT INTO SlicnostSvojstva(ID_Molekule1, ID_Molekule2, SlicnostS) VALUES({cid1}, {cid2}, {sl})".format(cid1=ids[i][0], cid2=ids[j][0], sl=similarity)
+                cursor.execute(sql)
+                conn.commit()
+                
+                sql = "SELECT Mirisno_Svojstvo from Svojstva where ID_Molekule = {idm}".format(idm=ids[i][0])
+                cursor.execute(sql)
+                mol1 = cursor.fetchall()
+                sql = "SELECT Mirisno_Svojstvo from Svojstva where ID_Molekule = {idm}".format(idm=ids[j][0])
+                cursor.execute(sql)
+                mol2 = cursor.fetchall()
+                
+                list1 = [k[0] for k in mol1]
+                list2 = [k[0] for k in mol2]
+
+                total = len(list2)
+                match = sum(1 for k in list1 if k in list2)
+                
+                if match > 0:
+                    sql = "INSERT INTO SlicnostMiris(ID_Molekule1, ID_Molekule2, SlicnostM) VALUES({cid1}, {cid2}, {sl})".format(
+                        cid1=ids[i][0], cid2=ids[j][0], sl=match / total)
+                    cursor.execute(sql)
+                    conn.commit()
+
+            conn.close()
+        except Exception as e:
+            print(e)
