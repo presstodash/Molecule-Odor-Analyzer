@@ -71,8 +71,8 @@ def SearchDescriptor(descriptor):
             sql = sql + sulfix
         sql = sql +""")  
                 GROUP BY ID_Molekule
-                HAVING COUNT(DISTINCT Mirisno_Svojstvo) >= 2
-            ) s ON m.ID_Molekule = s.ID_Molekule; """
+                HAVING COUNT(DISTINCT Mirisno_Svojstvo) >= {num}
+            ) s ON m.ID_Molekule = s.ID_Molekule; """.format(num = len(descriptor))
         cursor.execute(sql)
         x = cursor.fetchall()
 
@@ -245,7 +245,7 @@ def getTanimoto(molId, num):
     return mol
         
 
-#print(len(SearchDescriptor("fishy, nutty")))
+#print(len(SearchDescriptor("fishy, nutty, woody")))
 #print(SearchSmiles("asd"))
 #print(SearchName("aspirin"))
 #print(getScent(8082, 10))
