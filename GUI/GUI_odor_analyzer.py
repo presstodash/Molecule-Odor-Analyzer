@@ -120,97 +120,113 @@ class ChemicalSearchApp:
                         case "Smiles":
                             #messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
                             
+                            self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
                             
-                            self.frames[category].grid(columnspan=2, sticky='nsew', pady=10, padx=10,)
+                            self.molecule_display = ctk.CTkFrame(master=self.frames[category])
+                            self.molecule_display.pack(expand=True, fill="both")
                             
-                            self.molecule_dispay = ctk.CTkFrame(master=self.frames[category])
-                            self.molecule_dispay.pack(expand=True, fill="both")
-                            
-                            self.ime_label = ctk.CTkLabel(self.molecule_dispay, text="Ime Molekule:")
+                            self.ime_label = ctk.CTkLabel(self.molecule_display, text="Ime Molekule:")
                             self.ime_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[1])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[1])
                             self.ime_value.grid(row=0, column=1, pady=10, padx=10)
                             
                             
-                            self.smiles_label = ctk.CTkLabel(self.molecule_dispay, text="SMILES Kod:")
+                            self.smiles_label = ctk.CTkLabel(self.molecule_display, text="SMILES Kod:")
                             self.smiles_label.grid(row=1, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[2])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[2])
                             self.ime_value.grid(row=1, column=1, pady=10, padx=10)
                             
                             
-                            self.formula_label = ctk.CTkLabel(self.molecule_dispay, text="Molekulska formula:")
+                            self.formula_label = ctk.CTkLabel(self.molecule_display, text="Molekulska formula:")
                             self.formula_label.grid(row=2, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[3])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[3])
                             self.ime_value.grid(row=2, column=1, pady=10, padx=10)
                             
                             
-                            self.masa_label = ctk.CTkLabel(self.molecule_dispay, text="Relativna molekulska masa:")
+                            self.masa_label = ctk.CTkLabel(self.molecule_display, text="Relativna molekulska masa:")
                             self.masa_label.grid(row=3, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[4])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[4])
                             self.ime_value.grid(row=3, column=1, pady=10, padx=10)
                             
                             if img is not None: 
-                                self.slika_label = ctk.CTkLabel(self.molecule_dispay, text="Grafički prikaz:")
+                                self.slika_label = ctk.CTkLabel(self.molecule_display, text="Grafički prikaz:")
                                 self.slika_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
                                 
-                                tk_image = ImageTk.PhotoImage(img)
-                                label_image = tk.Label(self.molecule_dispay, image=tk_image)
-                                label_image.image = tk_image  # Keep a reference to the image
+                                img = ctk.CTkImage(light_image=img, dark_image=img, size=(300, 300))
+                                label_image = ctk.CTkLabel(self.molecule_display, image=img, text="")
                                 label_image.grid(row=4, column=1, pady=10, padx=10)
+                 
+                            #consider making dynamic number in the future
+                            numberofdisplayed = 10
                             
-                            
+                            tanimotoresult = getTanimoto(result[0],numberofdisplayed)
+
+                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
+                            self.scrollable_frame.grid(row=1, column = 3, colspan = 3, rowspan=4, pady=10, padx=10)
+
+                            self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(tanimotoresult), column=6, values=tanimotoresult)
+                            self.table.pack(expand=True, fill="both")
                         
                         case "Name":
                             #messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
                         
                             
                             
-                            self.frames[category].grid(columnspan=2, sticky='nsew', pady=10, padx=10,)
+                            self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
                             
-                            self.molecule_dispay = ctk.CTkFrame(master=self.frames[category])
-                            self.molecule_dispay.pack(expand=True, fill="both")
+                            self.molecule_display = ctk.CTkFrame(master=self.frames[category])
+                            self.molecule_display.pack(expand=True, fill="both")
                             
-                            self.ime_label = ctk.CTkLabel(self.molecule_dispay, text="Ime Molekule:")
+                            self.ime_label = ctk.CTkLabel(self.molecule_display, text="Ime Molekule:")
                             self.ime_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[1])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[1])
                             self.ime_value.grid(row=0, column=1, pady=10, padx=10)
                             
                             
-                            self.smiles_label = ctk.CTkLabel(self.molecule_dispay, text="SMILES Kod:")
+                            self.smiles_label = ctk.CTkLabel(self.molecule_display, text="SMILES Kod:")
                             self.smiles_label.grid(row=1, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[2])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[2])
                             self.ime_value.grid(row=1, column=1, pady=10, padx=10)
                             
                             
-                            self.formula_label = ctk.CTkLabel(self.molecule_dispay, text="Molekulska formula:")
+                            self.formula_label = ctk.CTkLabel(self.molecule_display, text="Molekulska formula:")
                             self.formula_label.grid(row=2, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[3])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[3])
                             self.ime_value.grid(row=2, column=1, pady=10, padx=10)
                             
                             
-                            self.masa_label = ctk.CTkLabel(self.molecule_dispay, text="Relativna molekulska masa:")
+                            self.masa_label = ctk.CTkLabel(self.molecule_display, text="Relativna molekulska masa:")
                             self.masa_label.grid(row=3, column=0, pady=10, padx=10, sticky=tk.W)
                             
-                            self.ime_value = tk.Message(self.molecule_dispay, text=result[4])
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[4])
                             self.ime_value.grid(row=3, column=1, pady=10, padx=10)
                             
                             if img is not None: 
-                                self.slika_label = ctk.CTkLabel(self.molecule_dispay, text="Grafički prikaz:")
+                                self.slika_label = ctk.CTkLabel(self.molecule_display, text="Grafički prikaz:")
                                 self.slika_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
-                                
-                                tk_image = ImageTk.PhotoImage(img)
-                                label_image = tk.Label(self.molecule_dispay, image=tk_image)
-                                label_image.image = tk_image  # Keep a reference to the image
+
+                                img = ctk.CTkImage(light_image=img, dark_image=img, size=(300, 300))
+                                label_image = ctk.CTkLabel(self.molecule_display, image=img, text="")
                                 label_image.grid(row=4, column=1, pady=10, padx=10)
                             
-                        
+                            #consider making dynamic number in the future
+                            numberofdisplayed = 10
+                            
+                            tanimotoresult = getTanimoto(result[0],numberofdisplayed)
+
+                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
+                            self.scrollable_frame.grid(row=1, column = 3, colspan = 3, rowspan=4, pady=10, padx=10)
+
+                            self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(tanimotoresult), column=6, values=tanimotoresult)
+                            self.table.pack(expand=True, fill="both")
+                            
                         case _:
                             print("No category found.")
                     

@@ -121,6 +121,12 @@ def SearchSmiles(smiles):
         mol = Chem.MolFromSmiles(x[2])# provjerit dal u ovom trenutku postoji smiles kod, i nastavit
         if mol is not None:
             img = Draw.MolToImage(mol, size=(300, 300))
+            img = img.convert('RGBA')
+
+            imgdata = img.getdata()
+            newimgdata = [(r, g, b, 0) if ((r > 100) and (g > 100) and (b > 100)) else (r, g, b, a) for r, g, b, a in imgdata]
+            img.putdata(newimgdata)
+            
     else:
         img = None
     
@@ -169,6 +175,11 @@ def SearchName(name):
         mol = Chem.MolFromSmiles(x[2])# provjerit dal u ovom trenutku postoji smiles kod, i nastavit
         if mol is not None:
             img = Draw.MolToImage(mol, size=(300, 300))
+            img = img.convert('RGBA')
+
+            imgdata = img.getdata()
+            newimgdata = [(r, g, b, 0) if ((r > 100) and (g > 100) and (b > 100)) else (r, g, b, a) for r, g, b, a in imgdata]
+            img.putdata(newimgdata)
     else:
         img = None
     
