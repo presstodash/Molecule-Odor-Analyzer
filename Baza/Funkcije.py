@@ -213,7 +213,7 @@ def getScent(molId, num):
             ids.append(i[1])
     mol = []
     for i in ids:
-        sql="""Select m.*, s.slicnostm from molekule as m
+        sql="""Select m.ime_molekule, m.smiles_kod, s.slicnostm from molekule as m
         inner join slicnostmiris as s
         on m.id_molekule = s.id_molekule1 or m.id_molekule = s.id_molekule2
         where id_molekule = {idm} and (s.id_molekule1 = {id2} or s.id_molekule2 = {id3})""".format(idm = i, id2 = molId, id3 = molId)
@@ -250,7 +250,7 @@ def getTanimoto(molId, num):
             ids.append(i[1])
     mol = []
     for i in ids:
-        sql="""Select m.*, s.slicnosts from molekule as m
+        sql="""Select m.ime_molekule, m.smiles_kod, s.slicnosts from molekule as m
         inner join slicnostsvojstva as s
         on m.id_molekule = s.id_molekule1 or m.id_molekule = s.id_molekule2
         where id_molekule = {idm} and (s.id_molekule1 = {id2} or s.id_molekule2 = {id3})""".format(idm = i, id2 = molId, id3 = molId)

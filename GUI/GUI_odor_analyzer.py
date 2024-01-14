@@ -1,4 +1,4 @@
-from Molecule_Odor_Analyzer.Baza.Funkcije import SearchDescriptor, SearchSmiles, SearchName
+from Molecule_Odor_Analyzer.Baza.Funkcije import SearchDescriptor, SearchSmiles, SearchName, getTanimoto, getScent
 import customtkinter as ctk
 import tkinter as tk
 import CTkTable as ctktable
@@ -120,11 +120,17 @@ class ChemicalSearchApp:
                         case "Smiles":
                             #messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
                             
-                            self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
-                            
-                            self.molecule_display = ctk.CTkFrame(master=self.frames[category])
+                            self.frames[category].grid(rowspan=self.columncount, columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
+                                                       
+                            self.molecule_display = ctk.CTkFrame(master=self.frames[category], border_width=5)
                             self.molecule_display.pack(expand=True, fill="both")
                             
+                            for i in range(10):
+                                self.molecule_display.grid_columnconfigure(i, weight=1)
+                            
+                            for i in range(6):
+                                self.molecule_display.grid_rowconfigure(i, weight=1)
+                                
                             self.ime_label = ctk.CTkLabel(self.molecule_display, text="Ime Molekule:")
                             self.ime_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
                             
@@ -165,22 +171,37 @@ class ChemicalSearchApp:
                             
                             tanimotoresult = getTanimoto(result[0],numberofdisplayed)
 
-                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
-                            self.scrollable_frame.grid(row=1, column = 3, colspan = 3, rowspan=4, pady=10, padx=10)
+                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
+                            self.scrollable_frame.grid(row=0, column = 3, columnspan = 8, rowspan=3, sticky="nsew", pady=10, padx=10)
 
-                            self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(tanimotoresult), column=6, values=tanimotoresult)
-                            self.table.pack(expand=True, fill="both")
+                            self.tanimototable = ctktable.CTkTable(master=self.scrollable_frame, row=len(tanimotoresult), column=3, values=tanimotoresult)
+                            self.tanimototable.pack(expand=True, fill="both")
+                            
+                            
+                            scentresult = getScent(result[0],numberofdisplayed)
+
+                            self.scrollable_frame2 = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
+                            self.scrollable_frame2.grid(row=3, column = 3, columnspan = 8, rowspan=3, sticky="nsew", pady=10, padx=10)
+
+                            self.scenttable = ctktable.CTkTable(master=self.scrollable_frame2, row=len(scentresult), column=3, values=scentresult)
+                            self.scenttable.pack(expand=True, fill="both")
                         
                         case "Name":
                             #messagebox.showinfo("Result", f"Matching Record(s):\n{result}")
                         
                             
                             
-                            self.frames[category].grid(columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
+                            self.frames[category].grid(rowspan=self.columncount, columnspan=self.columncount, sticky='nsew', pady=10, padx=10,)
                             
                             self.molecule_display = ctk.CTkFrame(master=self.frames[category])
                             self.molecule_display.pack(expand=True, fill="both")
                             
+                            for i in range(10):
+                                self.molecule_display.grid_columnconfigure(i, weight=1)
+                            
+                            for i in range(6):
+                                self.molecule_display.grid_rowconfigure(i, weight=1)
+                                
                             self.ime_label = ctk.CTkLabel(self.molecule_display, text="Ime Molekule:")
                             self.ime_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.W)
                             
@@ -221,12 +242,21 @@ class ChemicalSearchApp:
                             
                             tanimotoresult = getTanimoto(result[0],numberofdisplayed)
 
-                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
-                            self.scrollable_frame.grid(row=1, column = 3, colspan = 3, rowspan=4, pady=10, padx=10)
+                            self.scrollable_frame = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
+                            self.scrollable_frame.grid(row=0, column = 3, columnspan = 8, rowspan=3, sticky="nsew", pady=10, padx=10)
 
-                            self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(tanimotoresult), column=6, values=tanimotoresult)
-                            self.table.pack(expand=True, fill="both")
+                            self.tanimototable = ctktable.CTkTable(master=self.scrollable_frame, row=len(tanimotoresult), column=3, values=tanimotoresult)
+                            self.tanimototable.pack(expand=True, fill="both")
                             
+                            
+                            scentresult = getScent(result[0],numberofdisplayed)
+
+                            self.scrollable_frame2 = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
+                            self.scrollable_frame2.grid(row=3, column = 3, columnspan = 8, rowspan=3, sticky="nsew", pady=10, padx=10)
+
+                            self.scenttable = ctktable.CTkTable(master=self.scrollable_frame2, row=len(scentresult), column=3, values=scentresult)
+                            self.scenttable.pack(expand=True, fill="both")
+                        
                         case _:
                             print("No category found.")
                     
