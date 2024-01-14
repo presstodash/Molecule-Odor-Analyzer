@@ -193,7 +193,7 @@ def getScent(molId, num):
     
     cursor.execute(sql)
     x = cursor.fetchall()
-    print(x)
+    #print(x)
     ids = []
     for i in x:
         if i[0] != molId:
@@ -202,8 +202,10 @@ def getScent(molId, num):
             ids.append(i[1])
     mol = []
     for i in ids:
-        sql="""Select * from molekule
-        where id_molekule = {idm}""".format(idm = i)
+        sql="""Select m.*, s.slicnostm from molekule as m
+        inner join slicnostmiris as s
+        on m.id_molekule = s.id_molekule1 or m.id_molekule = s.id_molekule2
+        where id_molekule = {idm} and (s.id_molekule1 = {id2} or s.id_molekule2 = {id3})""".format(idm = i, id2 = molId, id3 = molId)
         cursor.execute(sql)
         m = cursor.fetchone()
         mol.append(m)
@@ -228,7 +230,7 @@ def getTanimoto(molId, num):
     
     cursor.execute(sql)
     x = cursor.fetchall()
-    print(x)
+    #print(x)
     ids = []
     for i in x:
         if i[0] != molId:
@@ -237,16 +239,18 @@ def getTanimoto(molId, num):
             ids.append(i[1])
     mol = []
     for i in ids:
-        sql="""Select * from molekule
-        where id_molekule = {idm}""".format(idm = i)
+        sql="""Select m.*, s.slicnosts from molekule as m
+        inner join slicnostsvojstva as s
+        on m.id_molekule = s.id_molekule1 or m.id_molekule = s.id_molekule2
+        where id_molekule = {idm} and (s.id_molekule1 = {id2} or s.id_molekule2 = {id3})""".format(idm = i, id2 = molId, id3 = molId)
         cursor.execute(sql)
         m = cursor.fetchone()
         mol.append(m)
     return mol
         
 
-#print(len(SearchDescriptor("fishy, nutty, woody")))
-#print(SearchSmiles("asd"))
+#print(SearchDescriptor("fishy, nutty, woody"))
+#print(SearchSmiles("CC1CCCC(N1)C"))
 #print(SearchName("aspirin"))
 #print(getScent(8082, 10))
 #print(getTanimoto(8082, 10))
