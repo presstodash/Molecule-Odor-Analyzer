@@ -107,7 +107,7 @@ conn.close()
 
 
 for i in range(len(ids)):
-    for j in range(i, len(ids)):
+    for j in range(i + 1, len(ids)):
         try:
             conn = psycopg2.connect(
                 database="kemoinformatika",
@@ -147,8 +147,13 @@ for i in range(len(ids)):
                 list1 = [k[0] for k in mol1]
                 list2 = [k[0] for k in mol2]
 
-                total = len(list2)
-                match = sum(1 for k in list1 if k in list2)
+                total = len(list1)
+                match = 0
+                for i in list2:
+                    if i in list1:
+                        match += 1
+                    else :
+                        total += 1
                 
                 if match > 0:
                     sql = "INSERT INTO SlicnostMiris(ID_Molekule1, ID_Molekule2, SlicnostM) VALUES({cid1}, {cid2}, {sl})".format(

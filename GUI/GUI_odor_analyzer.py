@@ -11,7 +11,7 @@ class ChemicalSearchApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Odor molecule analyzer")
-        self.root.geometry("1200x600")
+        self.root.geometry("1300x700")
 
         self.category_var = tk.StringVar()
         self.search_var = tk.StringVar()
@@ -158,13 +158,23 @@ class ChemicalSearchApp:
                             self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[4])
                             self.ime_value.grid(row=3, column=1, pady=10, padx=10)
                             
+                            descriptor = result2[0][0]
+                            for i in range(1, len(result2)):
+                                descriptor = descriptor + ", " + result2[i][0]
+                            
+                            self.desc_label = ctk.CTkLabel(self.molecule_display, text="Mirisni deskriptori:")
+                            self.desc_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=descriptor, height=30)
+                            self.ime_value.grid(row=4, column=1, pady=10, padx=10)
+                            
                             if img is not None: 
                                 self.slika_label = ctk.CTkLabel(self.molecule_display, text="Grafički prikaz:")
-                                self.slika_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
+                                self.slika_label.grid(row=5, column=0, pady=10, padx=10, sticky=tk.W)
                                 
                                 img = ctk.CTkImage(light_image=img, dark_image=img, size=(300, 300))
                                 label_image = ctk.CTkLabel(self.molecule_display, image=img, text="")
-                                label_image.grid(row=4, column=1, pady=10, padx=10)
+                                label_image.grid(row=5, column=1, pady=10, padx=10)
                  
                             #consider making dynamic number in the future
                             numberofdisplayed = 10
@@ -229,13 +239,23 @@ class ChemicalSearchApp:
                             self.ime_value = ctk.CTkLabel(self.molecule_display, text=result[4])
                             self.ime_value.grid(row=3, column=1, pady=10, padx=10)
                             
+                            descriptor = result2[0][0]
+                            for i in range(1, len(result2)):
+                                descriptor = descriptor + ", " + result2[i][0]
+                            
+                            self.desc_label = ctk.CTkLabel(self.molecule_display, text="Mirisni deskriptori:")
+                            self.desc_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
+                            
+                            self.ime_value = ctk.CTkLabel(self.molecule_display, text=descriptor, height=30)
+                            self.ime_value.grid(row=4, column=1, pady=10, padx=10)
+                            
                             if img is not None: 
                                 self.slika_label = ctk.CTkLabel(self.molecule_display, text="Grafički prikaz:")
-                                self.slika_label.grid(row=4, column=0, pady=10, padx=10, sticky=tk.W)
+                                self.slika_label.grid(row=5, column=0, pady=10, padx=10, sticky=tk.W)
 
                                 img = ctk.CTkImage(light_image=img, dark_image=img, size=(300, 300))
                                 label_image = ctk.CTkLabel(self.molecule_display, image=img, text="")
-                                label_image.grid(row=4, column=1, pady=10, padx=10)
+                                label_image.grid(row=5, column=1, pady=10, padx=10)
                             
                             #consider making dynamic number in the future
                             numberofdisplayed = 10
