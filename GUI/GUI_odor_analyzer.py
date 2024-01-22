@@ -105,6 +105,14 @@ class ChemicalSearchApp:
                 # Show the selected frame
                 if category in ["Descriptor","Smiles","Name"]:
 
+                    #Delete previously shown data
+                    for widget in self.frames["Descriptor"].winfo_children():
+                        widget.destroy()
+                    for widget in self.frames["Smiles"].winfo_children():
+                        widget.destroy()
+                    for widget in self.frames["Name"].winfo_children():
+                        widget.destroy()
+                        
                     match category:
                         case "Descriptor":
 
