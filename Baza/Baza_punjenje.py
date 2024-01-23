@@ -5,13 +5,15 @@ from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem import AllChem
 from rdkit.DataStructs import TanimotoSimilarity
+from Molecule_Odor_Analyzer.Baza.Baza_account import getUser, getPassword
+
+pgUser = getUser()
+pgPassword = getPassword()
 
 file_path = 'curated_GS_LF_merged_4983.csv'
 
 firstLine = True
 
-pgUser = "postgres"
-pgPassword = "root"
 
 
 x = 1
