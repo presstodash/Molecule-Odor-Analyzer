@@ -15,8 +15,11 @@ set "tempfile=Molecule_Odor_Analyzer\Baza\Baza_account_temp.py"
 ))>"%tempfile%"
 move /y "%tempfile%" "%file%" >nul
 
+echo Installing required libraries...
+pip install -r requirements.txt
 echo Starting initialization...
 python -m Molecule_Odor_Analyzer.Baza.Baza_inicijalizacija
 echo Starting database fill process...
 python -m Molecule_Odor_Analyzer.Baza.Baza_punjenje
 echo Script successfully executed
+pause

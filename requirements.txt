@@ -1,0 +1,10 @@
+CustomTkinter
+CTkTable
+joblib
+numpy
+pandas
+Pillow
+psycopg2
+pubchempy
+rdkit-pypi
+scikit-learn
