@@ -3,9 +3,10 @@ import pubchempy as pcp  # PubChem baza podataka
 #import csv
 from rdkit import Chem
 from rdkit.Chem import Draw
+from Molecule_Odor_Analyzer.Baza.Baza_account import getUser, getPassword
 
-pgUser = "postgres"
-pgPassword = "root"
+pgUser = getUser()
+pgPassword = getPassword()
 
 
 

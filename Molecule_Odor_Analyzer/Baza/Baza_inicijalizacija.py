@@ -1,8 +1,9 @@
 import psycopg2  # PostgreSQL
 #import pubchempy  # PubChem baza podataka
+from Molecule_Odor_Analyzer.Baza.Baza_account import getUser, getPassword
 
-pgUser = "postgres"
-pgPassword = "root"
+pgUser = getUser()
+pgPassword = getPassword()
 
 # povezivanje s postgres bazom
 conn = psycopg2.connect(
