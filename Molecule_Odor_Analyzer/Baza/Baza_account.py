@@ -1,9 +1,6 @@
 pgUser = "postgres"
-pgPassword = "root"
-
-
+pgPassword = "PLACEHOLDER"
 def getUser():
     return pgUser
-
 def getPassword():
     return pgPassword
