@@ -5,7 +5,7 @@ from rdkit import Chem
 from rdkit.Chem import Draw
 
 pgUser = "postgres"
-pgPassword = "Zw5yY9Lc"
+pgPassword = "root"
 
 
 
