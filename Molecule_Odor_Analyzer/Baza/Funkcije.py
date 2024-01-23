@@ -5,6 +5,7 @@ from rdkit import Chem
 from rdkit.Chem import Draw
 from Molecule_Odor_Analyzer.Baza.Baza_account import getUser, getPassword
 
+
 pgUser = getUser()
 pgPassword = getPassword()
 
