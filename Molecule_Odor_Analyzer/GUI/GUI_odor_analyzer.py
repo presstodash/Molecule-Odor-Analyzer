@@ -121,6 +121,9 @@ class ChemicalSearchApp:
                             self.scrollable_frame = ctk.CTkScrollableFrame(master=self.frames[category])
                             self.scrollable_frame.pack(expand=True, fill="both")
 
+                            cols = ("Molecule id", "Molecule name", "Smiles code", "Molecular formula", "Relative molecular mass")
+                            result.insert(0, cols)
+                            
                             self.table = ctktable.CTkTable(master=self.scrollable_frame, row=len(result), column=5,
                                                            values=result, font=("Helvetica", 15), height=38)
                             self.table.pack(expand=True, fill="both")
@@ -186,7 +189,9 @@ class ChemicalSearchApp:
                             numberofdisplayed = 10
 
                             tanimotoresult = getTanimoto(result[0], numberofdisplayed)
-
+                            tanimotocols = ("Molecule name", "Smiles code","Tanimoto distance")
+                            tanimotoresult.insert(0, tanimotocols)
+                            
                             self.scrollable_frame = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
                             self.scrollable_frame.grid(row=0, column=3, columnspan=8, rowspan=3, sticky="nsew", pady=10,
                                                        padx=10)
@@ -198,7 +203,9 @@ class ChemicalSearchApp:
                             self.tanimototable.pack(expand=True, fill="both")
 
                             scentresult = getScent(result[0], numberofdisplayed)
-
+                            scentcols = ("Molecule name", "Smiles code","Descriptor similarity")
+                            scentresult.insert(0, scentcols)
+                            
                             self.scrollable_frame2 = ctk.CTkScrollableFrame(master=self.molecule_display,
                                                                             border_width=5)
                             self.scrollable_frame2.grid(row=3, column=3, columnspan=8, rowspan=3, sticky="nsew",
@@ -270,6 +277,8 @@ class ChemicalSearchApp:
                             numberofdisplayed = 10
 
                             tanimotoresult = getTanimoto(result[0], numberofdisplayed)
+                            tanimotocols = ("Molecule name", "Smiles code","Tanimoto distance")
+                            tanimotoresult.insert(0, tanimotocols)
 
                             self.scrollable_frame = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
                             self.scrollable_frame.grid(row=0, column=3, columnspan=8, rowspan=3, sticky="nsew", pady=10,
@@ -281,6 +290,8 @@ class ChemicalSearchApp:
                             self.tanimototable.pack(expand=True, fill="both")
 
                             scentresult = getScent(result[0], numberofdisplayed)
+                            scentcols = ("Molecule name", "Smiles code","Descriptor similarity")
+                            scentresult.insert(0, scentcols)
 
                             self.scrollable_frame2 = ctk.CTkScrollableFrame(master=self.molecule_display,
                                                                             border_width=5)

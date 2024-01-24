@@ -4,6 +4,7 @@ import pubchempy as pcp  # PubChem baza podataka
 from rdkit import Chem
 from rdkit.Chem import Draw
 from Molecule_Odor_Analyzer.Baza.Baza_account import getUser, getPassword
+#from Baza_account import getPassword, getUser
 
 pgUser = getUser()
 pgPassword = getPassword()
