@@ -10,8 +10,8 @@ from PIL import Image, ImageTk
 class ChemicalSearchApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Odor molecule analyzer")
-        self.root.geometry("1300x700")
+        self.root.title("Molecule odor analyzer")
+        self.root.geometry("1350x750")
 
         self.category_var = tk.StringVar()
         self.search_var = tk.StringVar()
@@ -29,42 +29,44 @@ class ChemicalSearchApp:
                        "Name": ctk.CTkFrame(self.frame)}
 
         for frame in self.frames.values():
-            frame.grid(row=1, column=0, sticky='nsew')
+            frame.grid(row=2, column=0, sticky='nsew')
 
         for frame in self.frames.values():
             frame.grid_forget()
 
         # dynamic sizing
-        self.frame.grid_rowconfigure(1, weight=1)
-
+        self.frame.grid_rowconfigure(2, weight=1)
         self.columncount = 5
 
         for i in range(self.columncount):
             self.frame.grid_columnconfigure(i, weight=1)
 
+        self.programname_label = ctk.CTkLabel(self.frame, text="Molecule Odor Analyzer", font=ctk.CTkFont(family="Helvetica", size=30, weight="bold"), height=30)
+        self.programname_label.grid(row=0, column=0, columnspan = self.columncount, pady=5, padx=10, sticky="nsew")
+        
         # Dropdown menu for categories
         self.category_label = ctk.CTkLabel(self.frame, text="Select Category:", font=("Helvetica", 20), height=30)
-        self.category_label.grid(row=0, column=0, pady=10, padx=10, sticky=tk.E)
+        self.category_label.grid(row=1, column=0, pady=10, padx=10, sticky=tk.E)
 
         categories = ["Descriptor", "Smiles", "Name"]
 
         # Create the CTkComboBox
         self.category_dropdown = ctk.CTkComboBox(self.frame, values=categories, font=("Helvetica", 18),
                                                  dropdown_font=("Helvetica", 15), height=30)
-        self.category_dropdown.grid(row=0, column=1, pady=10, padx=5, sticky=tk.W)
+        self.category_dropdown.grid(row=1, column=1, pady=10, padx=5, sticky=tk.W)
         self.category_dropdown.configure(state="readonly")
 
         # Entry
         self.search_label = ctk.CTkLabel(self.frame, text="Enter Search Value:", font=("Helvetica", 20), height=30)
-        self.search_label.grid(row=0, column=2, pady=10, padx=5, sticky=tk.E)
+        self.search_label.grid(row=1, column=2, pady=10, padx=5, sticky=tk.E)
 
         self.search_entry = ctk.CTkEntry(self.frame, textvariable=self.search_var, font=("Helvetica", 18), height=30)
-        self.search_entry.grid(row=0, column=3, pady=10, padx=5, sticky=tk.W)
+        self.search_entry.grid(row=1, column=3, pady=10, padx=5, sticky=tk.W)
 
         # Search button
         self.search_button = ctk.CTkButton(self.frame, text="Search", font=("Helvetica", 20),
                                            command=self.perform_search, height=30)
-        self.search_button.grid(row=0, column=4, columnspan=2, pady=20)
+        self.search_button.grid(row=1, column=4, columnspan=2, pady=20)
 
         # Trace changes in the CTkComboBox
         # self.category_var.trace('w', lambda *args: self.category_var.set(category_dropdown.get()))
@@ -189,7 +191,7 @@ class ChemicalSearchApp:
                             numberofdisplayed = 10
 
                             tanimotoresult = getTanimoto(result[0], numberofdisplayed)
-                            tanimotocols = ("Molecule name", "Smiles code","Tanimoto distance")
+                            tanimotocols = ("Molecule name", "Smiles code","Tanimoto similarity")
                             tanimotoresult.insert(0, tanimotocols)
                             
                             self.scrollable_frame = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
@@ -203,7 +205,7 @@ class ChemicalSearchApp:
                             self.tanimototable.pack(expand=True, fill="both")
 
                             scentresult = getScent(result[0], numberofdisplayed)
-                            scentcols = ("Molecule name", "Smiles code","Descriptor similarity")
+                            scentcols = ("Molecule name", "Smiles code","Odor similarity")
                             scentresult.insert(0, scentcols)
                             
                             self.scrollable_frame2 = ctk.CTkScrollableFrame(master=self.molecule_display,
@@ -277,7 +279,7 @@ class ChemicalSearchApp:
                             numberofdisplayed = 10
 
                             tanimotoresult = getTanimoto(result[0], numberofdisplayed)
-                            tanimotocols = ("Molecule name", "Smiles code","Tanimoto distance")
+                            tanimotocols = ("Molecule name", "Smiles code","Tanimoto similarity")
                             tanimotoresult.insert(0, tanimotocols)
 
                             self.scrollable_frame = ctk.CTkScrollableFrame(master=self.molecule_display, border_width=5)
@@ -290,7 +292,7 @@ class ChemicalSearchApp:
                             self.tanimototable.pack(expand=True, fill="both")
 
                             scentresult = getScent(result[0], numberofdisplayed)
-                            scentcols = ("Molecule name", "Smiles code","Descriptor similarity")
+                            scentcols = ("Molecule name", "Smiles code","Odor similarity")
                             scentresult.insert(0, scentcols)
 
                             self.scrollable_frame2 = ctk.CTkScrollableFrame(master=self.molecule_display,
