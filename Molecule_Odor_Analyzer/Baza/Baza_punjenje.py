@@ -151,8 +151,8 @@ for i in range(len(ids)):
 
                 total = len(list1)
                 match = 0
-                for i in list2:
-                    if i in list1:
+                for l in list2:
+                    if l in list1:
                         match += 1
                     else :
                         total += 1
