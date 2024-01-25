@@ -188,7 +188,7 @@ class ChemicalSearchApp:
                                 label_image.grid(row=5, column=1, pady=10, padx=10)
 
                             # consider making dynamic number in the future
-                            numberofdisplayed = 10
+                            numberofdisplayed = 25
 
                             tanimotoresult = getTanimoto(result[0], numberofdisplayed)
                             tanimotocols = ("Molecule name", "Smiles code","Tanimoto similarity")
@@ -276,7 +276,7 @@ class ChemicalSearchApp:
                                 label_image.grid(row=5, column=1, pady=10, padx=10)
 
                             # consider making dynamic number in the future
-                            numberofdisplayed = 10
+                            numberofdisplayed = 25
 
                             tanimotoresult = getTanimoto(result[0], numberofdisplayed)
                             tanimotocols = ("Molecule name", "Smiles code","Tanimoto similarity")
